@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- ==========================================
+         FAVICONS (Mantidos do original)
+    ========================================== -->
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Julia Nazar" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+
+    <!-- ==========================================
+         🔒 BLOQUEIO TOTAL DE INDEXAÇÃO E RASTREAMENTO
+    ========================================== -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="googlebot" content="noindex, nofollow">
+    <meta name="bingbot" content="noindex, nofollow">
+    <meta name="rating" content="adult">
+    <meta name="content-rating" content="adult">
+
+    <!-- ==========================================
+         TÍTULO E DESCRIÇÃO NEUTROS
+    ========================================== -->
+    <title>Julia Nazar | Links Oficiais</title>
+    <meta name="description" content="Meus links oficiais.">
+    <link rel="canonical" href="https://julianazarh.com/">
+
+    <meta name="theme-color" content="#000000">
+    <meta name="color-scheme" content="dark">
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- ==========================================
+         🎭 OPEN GRAPH & TWITTER (PREVIEW SEGURO)
+         Aponta APENAS para a imagem neutra (og-safe.jpg)
+    ========================================== -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Julia Nazar">
+    <meta property="og:description" content="Meus links oficiais ✨">
+    <meta property="og:image" content="/og-safe.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://julianazarh.com/">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:site_name" content="Julia Nazar">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Julia Nazar">
+    <meta name="twitter:description" content="Meus links oficiais ✨">
+    <meta name="twitter:image" content="/og-safe.jpg">
+
+    <!-- ==========================================
+         SEGURANÇA E PRIVACIDADE
+    ========================================== -->
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+
+    <!-- ==========================================
+         ESTILOS
+    ========================================== -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animation.css">
+
+    <!-- ==========================================
+         GOOGLE ANALYTICS 4 (GA4)
+    ========================================== -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VCGCEF7ZFN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-VCGCEF7ZFN');
+    </script>
+</head>
+<body>
+
+    <!-- Fundo vazio. A imagem Base64 será injetada via JS (main.js) -->
+    <div class="page-bg" aria-hidden="true"></div>
+
+    <!-- Sprite SVG para ícones -->
+    <svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style="position:absolute; width:0; height:0; overflow:hidden;">
+        <symbol id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </symbol>
+    </svg>
+
+    <main class="main-container">
+        <section class="hero-section">
+            <div class="hero-intro">
+                <div class="hero-title-row">
+                    <h1 class="hero-title">Julia Nazar</h1>
+                    <img src="icons/logo.png" alt="" class="hero-title-icon" aria-hidden="true" decoding="async">
+                </div>
+                <p class="hero-subtitle">Todos os meus conteúdos nos links abaixo 👇🏼🥰</p>
+            </div>
+        </section>
+
+        <section class="cards-section" aria-label="Links de acesso">
+            <!-- O JS vai limpar o spinner e injetar os cards decodificados aqui -->
+            <div class="cards-grid" id="cards-container">
+                <div class="loading-spinner">Carregando...</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==========================================
+         MODAL +18
+    ========================================== -->
+    <div id="age-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc" hidden>
+        <div class="modal-container" role="document">
+            <button id="modal-close" class="modal-close-btn" aria-label="Fechar modal" type="button">
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+                    <use href="#icon-close"></use>
+                </svg>
+            </button>
+
+            <div class="modal-content">
+                <h2 id="modal-title">18+</h2>
+                <p class="modal-subtitle">Conteúdo para Adultos</p>
+                <p id="modal-desc" class="modal-description">
+                    Este link pode conter conteúdo explícito ou destinado exclusivamente a maiores de 18 anos.
+                </p>
+
+                <button id="modal-confirm" class="modal-btn modal-btn-primary" type="button">
+                    <span aria-hidden="true">✓</span> Tenho 18 anos ou mais
+                </button>
+
+                <button id="modal-cancel" class="modal-btn modal-btn-secondary" type="button">
+                    Voltar
+                </button>
+
+                <div class="modal-footer-note">
+                    <span aria-hidden="true">♡</span>
+                    <p>Ao continuar, você confirma ter 18 anos ou mais.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         FALLBACK PARA USUÁRIOS SEM JAVASCRIPT
+    ========================================== -->
+    <noscript>
+        <div style="position:fixed; inset:0; display:grid; place-items:center; background:#000; color:#fff; font-family:sans-serif; text-align:center; padding:2rem; z-index:99999;">
+            <p>Ative o JavaScript no seu navegador para visualizar o conteúdo.</p>
+        </div>
+    </noscript>
+
+    <!-- ==========================================
+         SCRIPT PRINCIPAL (Contém a lógica de segurança e renderização)
+    ========================================== -->
+    <script src="js/main.js" defer></script>
+</body>
+</html>

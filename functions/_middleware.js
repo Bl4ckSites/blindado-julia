@@ -3,13 +3,12 @@ export async function onRequest(context) {
   const ua = (request.headers.get('user-agent') || '').toLowerCase();
   const asn = request.cf?.asn;
 
-  // Lista de assinaturas de bots da Meta e WhatsApp
+  // Identifica bots da Meta e WhatsApp
   const isMetaBotUA = /facebookexternalhit|meta-externalagent|meta-externalfetcher|meta-webindexer|whatsapp/i.test(ua);
 
-  // A MÁGICA: Bloqueia APENAS se vier da ASN da Meta (32934) E for um User-Agent de bot.
-  // Isso garante que usuários reais do WhatsApp (que usam UA de navegador normal e ASN de operadora) passem livremente.
+  // Bloqueia APENAS se vier da ASN da Meta (32934) E for um User-Agent de bot.
+  // Isso permite que usuários reais do WhatsApp (que usam UA de navegador normal) passem.
   if (asn === 32934 && isMetaBotUA) {
-    // Retorna um HTML mínimo e seguro. O bot acha que o site é só isso e vai embora.
     return new Response(`<!DOCTYPE html>
 <html lang="pt-BR">
 <head>

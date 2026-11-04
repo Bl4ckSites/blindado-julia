@@ -1,13 +1,39 @@
 /* ==========================================================================
-JULIANA ZARH — main.js (Versão Blindada)
+JULIANA ZARH — main.js (Versão Blindada com Debug)
 ========================================================================== */
 'use strict';
+
+/* =============================================================
+🐛 SISTEMA DE DEBUG (remova em produção)
+============================================================= */
+const DEBUG = true; // Mude para false quando tudo estiver funcionando
+
+function debugLog(msg, type = 'info') {
+  if (!DEBUG) return;
+  const styles = {
+    info:    'color: #4CAF50; font-weight: bold;',
+    warn:    'color: #FF9800; font-weight: bold;',
+    error:   'color: #F44336; font-weight: bold; background: #ffebee; padding: 2px 6px; border-radius: 3px;',
+    success: 'color: #2196F3; font-weight: bold;'
+  };
+  console.log(`%c[JULIANA] ${msg}`, styles[type] || styles.info);
+}
+
+debugLog('🚀 Script main.js carregado com sucesso', 'info');
 
 /* =============================================================
 DADOS SEGUROS (Codificados em Base64)
 ⚠️ COLE SUA STRING BASE64 ABAIXO, DENTRO DAS ASPAS, APÓS A BARRA
 ============================================================= */
 const BG_DATA_URL = "data:image/jpeg;base64,COLE_AQUI_SUA_STRING_BASE64_SEM_QUEBRAS_DE_LINHA";
+
+// Debug: verifica se a string Base64 foi colada
+if (BG_DATA_URL.includes('COLE_AQUI')) {
+  debugLog('⚠️ ATENÇÃO: A string Base64 da imagem AINDA NÃO foi colada!', 'error');
+  debugLog('   Edite o main.js e substitua "COLE_AQUI_SUA_STRING..." pela string real.', 'warn');
+} else {
+  debugLog(`✅ Imagem Base64 válida detectada (${BG_DATA_URL.length} caracteres)`, 'success');
+}
 
 const SECURE_CARDS = [
   { id: 'privacy', name: 'Privacy', iconSrc: 'icons/privacy.png', urlB64: 'aHR0cHM6Ly9wcml2YWN5LmNvbS5ici9wcm9maWxlL2p1bGlhbmF6YXI=', requiresAgeCheck: true },
@@ -26,6 +52,22 @@ const ICONS = {
 INICIALIZAÇÃO SEGURA
 ============================================================= */
 document.addEventListener('DOMContentLoaded', () => {
+  debugLog('📄 DOMContentLoaded disparado', 'info');
+  
+  // Verifica se os elementos essenciais existem
+  const bgElement = document.querySelector('.page-bg');
+  const container = document.getElementById('cards-container');
+  const modal = document.getElementById('age-modal');
+  
+  if (!bgElement) debugLog('❌ Elemento .page-bg NÃO encontrado!', 'error');
+  else debugLog('✅ Elemento .page-bg encontrado', 'success');
+  
+  if (!container) debugLog('❌ Elemento #cards-container NÃO encontrado!', 'error');
+  else debugLog('✅ Elemento #cards-container encontrado', 'success');
+  
+  if (!modal) debugLog('❌ Elemento #age-modal NÃO encontrado!', 'error');
+  else debugLog('✅ Elemento #age-modal encontrado', 'success');
+  
   initSecureApp();
   initModal();
 });
@@ -33,14 +75,20 @@ document.addEventListener('DOMContentLoaded', () => {
 function initSecureApp() {
   // 1. Bloqueio básico de automação no cliente
   if (navigator.webdriver === true) {
-    document.getElementById('cards-container').innerHTML = '<div class="loading-spinner">Erro de ambiente.</div>';
+    debugLog('🤖 navigator.webdriver = true → Bot detectado!', 'error');
+    const container = document.getElementById('cards-container');
+    if (container) container.innerHTML = '<div class="loading-spinner">Erro de ambiente.</div>';
     return;
   }
+  debugLog('✅ navigator.webdriver = false (navegador real)', 'success');
 
-  // 2. Injeta a imagem de fundo de forma segura (nunca aparece no HTML estático)
+  // 2. Injeta a imagem de fundo de forma segura
   const bgElement = document.querySelector('.page-bg');
   if (bgElement && BG_DATA_URL.includes('COLE_AQUI') === false) {
     bgElement.style.backgroundImage = `url('${BG_DATA_URL}')`;
+    debugLog('🖼️ Imagem de fundo injetada via JS', 'success');
+  } else if (bgElement && BG_DATA_URL.includes('COLE_AQUI')) {
+    debugLog('⚠️ Imagem de fundo NÃO injetada (placeholder ainda presente)', 'warn');
   }
 
   // 3. Decodifica e renderiza os cards
@@ -49,13 +97,17 @@ function initSecureApp() {
 
 function renderCardsSecurely() {
   const container = document.getElementById('cards-container');
-  if (!container) return;
+  if (!container) {
+    debugLog('❌ Container dos cards não existe, abortando renderização', 'error');
+    return;
+  }
   
   container.innerHTML = ''; // Limpa o spinner
+  debugLog(`🎴 Renderizando ${SECURE_CARDS.length} cards...`, 'info');
 
   SECURE_CARDS.forEach((card, index) => {
-    // Decodifica a URL em memória (atob é nativo e seguro para Base64)
     const realUrl = atob(card.urlB64);
+    debugLog(`   → ${card.name}: ${realUrl}`, 'info');
     
     const cardElement = document.createElement('a');
     cardElement.className = 'card-item';
@@ -93,6 +145,8 @@ function renderCardsSecurely() {
 
     container.appendChild(cardElement);
   });
+  
+  debugLog(`✅ ${SECURE_CARDS.length} cards renderizados com sucesso!`, 'success');
 }
 
 /* =============================================================
@@ -105,7 +159,11 @@ function handleCardClick(url, card, cardElement) {
       cardElement.classList.remove('card-pulse');
     }, { once: true });
   }
-  if (url === '#' || !url) return;
+  if (url === '#' || !url) {
+    debugLog(`⚠️ Clique em ${card.name} com URL inválida: ${url}`, 'warn');
+    return;
+  }
+  debugLog(`👆 Clique em: ${card.name} → ${url}`, 'info');
   
   trackCardClick(card.name, card.id, url);
   
@@ -117,13 +175,17 @@ function handleCardClick(url, card, cardElement) {
 }
 
 function trackCardClick(cardName, cardId, destinationUrl) {
-  if (typeof window.gtag !== 'function') return;
+  if (typeof window.gtag !== 'function') {
+    debugLog('📊 GA4 não disponível (gtag não definido)', 'warn');
+    return;
+  }
   window.gtag('event', 'select_content', {
     content_type: 'card_link',
     content_id: cardId || cardName,
     card_name: cardName,
     destination_url: destinationUrl || ''
   });
+  debugLog(`📊 GA4 track: ${cardName}`, 'info');
 }
 
 /* =============================================================
@@ -226,7 +288,11 @@ function initModal() {
   const closeBtn = document.getElementById('modal-close');
   const confirmBtn = document.getElementById('modal-confirm');
   const cancelBtn = document.getElementById('modal-cancel');
-  if (!modal) return;
+  if (!modal) {
+    debugLog('❌ Modal não encontrado, pulando initModal', 'error');
+    return;
+  }
+  debugLog('✅ Modal +18 inicializado', 'success');
 
   let selectedDestination = null;
   let previouslyFocusedElement = null;
@@ -288,3 +354,26 @@ function initModal() {
 
   window.triggerAgeModal = (url) => { selectedDestination = url; openModal(); };
 }
+
+/* =============================================================
+🐛 RESUMO FINAL NO CONSOLE
+============================================================= */
+window.addEventListener('load', () => {
+  if (!DEBUG) return;
+  console.log('%c========================================', 'color: #2196F3; font-weight: bold;');
+  console.log('%c  JULIANA ZARH — Debug Report', 'color: #2196F3; font-weight: bold;');
+  console.log('%c========================================', 'color: #2196F3; font-weight: bold;');
+  
+  const bg = document.querySelector('.page-bg');
+  const bgStyle = bg ? window.getComputedStyle(bg).backgroundImage : 'N/A';
+  console.log(`%cBackground: ${bgStyle}`, 'color: #4CAF50;');
+  
+  const cards = document.querySelectorAll('.card-item');
+  console.log(`%cCards renderizados: ${cards.length}`, 'color: #4CAF50;');
+  
+  const hasPlaceholder = BG_DATA_URL.includes('COLE_AQUI');
+  console.log(`%cBase64 placeholder: ${hasPlaceholder ? '⚠️ SIM (precisa colar!)' : '✅ NÃO (ok)'}`, 
+    hasPlaceholder ? 'color: #FF9800;' : 'color: #4CAF50;');
+  
+  console.log('%c========================================', 'color: #2196F3; font-weight: bold;');
+});

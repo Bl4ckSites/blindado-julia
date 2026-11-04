@@ -2,11 +2,12 @@
   "version": 1,
   "include": ["/*"],
   "exclude": [
-    "/css/*",          
-    "/js/*",           
-    "/icons/*",        
-    "/favicon/*",      
-    "/og-safe.jpg",    
-    "/sitemap.xml"     
+    "/css/*",
+    "/js/*",
+    "/icons/*",
+    "/favicon/*",
+    "/og-safe.jpg",
+    "/robots.txt",
+    "/sitemap.xml"
   ]
 }

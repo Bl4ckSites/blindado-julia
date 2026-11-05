@@ -1,5 +1,5 @@
 /* ==========================================================================
-JULIANA ZARH — main.js (Arquitetura Híbrida Segura)
+JULIANA ZARH — main.js (Arquitetura Híbrida Segura + Degradação Graciosa)
 ========================================================================== */
 'use strict';
 
@@ -20,24 +20,36 @@ async function loadSecureData() {
   const container = document.getElementById('cards-container');
   
   try {
-    // Busca os dados do cofre. Se não tiver cf_clearance, o servidor retorna 404.
+    // Busca os dados do cofre.
     const response = await fetch('/api/data');
     if (!response.ok) throw new Error('Acesso negado ou não autorizado');
     
     appData = await response.json();
 
-    // Aplica a imagem de fundo Base64 (só chega aqui se a verificação passou)
-    if (appData.backgroundImage) {
-      const bgElement = document.querySelector('.page-bg');
-      if (bgElement) {
-        bgElement.style.backgroundImage = `url('${appData.backgroundImage}')`;
+    // =====================================================================
+    // TÉCNICA DE DEGRADAÇÃO GRACIOSA (Graceful Degradation)
+    // Tentamos aplicar a imagem. Se o WebView do Instagram não aguentar o 
+    // peso do Base64, ele joga um erro aqui, mas NÃO trava a renderização.
+    // =====================================================================
+    try {
+      if (appData.backgroundImage && appData.backgroundImage.startsWith('data:image')) {
+        const bgElement = document.querySelector('.page-bg');
+        if (bgElement) {
+          bgElement.style.backgroundImage = `url('${appData.backgroundImage}')`;
+        }
       }
+    } catch (imgError) {
+      console.warn('Aviso: A imagem de fundo falhou ao carregar (possível limite de memória do WebView). Mantendo fundo preto.', imgError);
+      // O fundo preto definido no CSS continua, o código segue em frente.
     }
 
+    // Renderiza os cards independentemente da imagem ter carregado ou falhado
     renderCards(container);
+
   } catch (error) {
     console.error('Erro ao carregar dados:', error);
     if (container) {
+      // Se a API falhar totalmente (ex: bloqueio de bot), mostra erro
       container.innerHTML = '<div class="loading-spinner">Erro de conexão. Atualize a página.</div>';
     }
   }
@@ -79,7 +91,6 @@ function renderCards(container) {
 
     attachTapHandler(cardElement, (event) => {
       createRipple(event, cardElement);
-      // ATENÇÃO: Aqui usamos card.path, que vai para o cofre /r/[slug]
       handleCardClick(card.path, card, cardElement);
     });
 
